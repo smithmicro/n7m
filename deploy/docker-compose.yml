@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  web:
+    image: smithmicro/n7m-web
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+      - ui
+    mem_limit: 100m
+  ui:
+    image: smithmicro/n7m-ui
+    restart: always
+    depends_on:
+      - app
+    mem_limit: 100m
+  app:
+    image: smithmicro/n7m-app
+    restart: always
+    depends_on:
+      - gis
+    environment:
+      - PGPASSWORD=n7m-geocoding
+    mem_limit: 200m
+  feed:
+    image: smithmicro/n7m-app
+    depends_on:
+      - gis
+    environment:
+      - PGPASSWORD=n7m-geocoding
+      - OSM_FILENAME=north-america-latest.osm.pbf
+    command: setup
+    volumes:
+      - /data/data:/data/
+    shm_size: 1gb
+  gis:
+    image: smithmicro/n7m-gis
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=n7m-geocoding
+    volumes:
+      - /data/pgdata:/var/lib/postgresql/data
+    shm_size: 1gb
