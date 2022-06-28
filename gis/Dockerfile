@@ -1,4 +1,4 @@
-FROM postgis/postgis:13-3.2-alpine
+FROM postgis/postgis:14-3.2-alpine
 
 # Nominatim recommended configuration
 COPY --chown=postgres:postgres postgresql.conf /etc/postgresql/postgresql.conf

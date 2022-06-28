@@ -82,6 +82,12 @@ For updates, consider these configurations:
 * `ubuntu:focal`
   * 485MB Image for `n7m-app`
   * Python 3.8.10, PHP 7.4.3, psql 12.11
+* `debian:bookworm-slim` (not released)
+  * 501MB Image for `n7m-app`
+  * Python 3.10.5, PHP 8.1.5, psql 14.4
+* `ubuntu:jammy`
+  * 528MB Image for `n7m-app`
+  * Python 3.10.4, PHP 8.1.2, psql 14.3
 
 ## Advanced Tokenizer
 This image only uses the ICU Tokenizer.  By default the included `tokenizer.php` file drives the PHP code and has a simple English tokenizer.
