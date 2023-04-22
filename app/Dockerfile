@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim AS build
+FROM ubuntu:jammy AS build
 
 # https://nominatim.org/release-docs/develop/appendix/Install-on-Ubuntu-20/
 # Changes from the docs:
@@ -23,10 +23,10 @@ RUN apt-get update && apt-get install -y \
     php-cgi \
     php-pgsql \
     php-intl \
-    postgresql-13-postgis-3 \
-    postgresql-13-postgis-3-scripts \
-    postgresql-contrib-13 \
-    postgresql-server-dev-13 \
+    postgresql-14-postgis-3 \
+    postgresql-14-postgis-3-scripts \
+    postgresql-contrib-14 \
+    postgresql-server-dev-14 \
     python3-datrie \
     python3-dotenv \
     python3-icu \
@@ -50,7 +50,7 @@ RUN curl -O -L http://www.nominatim.org/release/Nominatim-$NOMINATIM_VERSION.tar
  && make install
 
 # now start over from the same base image
-FROM debian:bullseye-slim
+FROM ubuntu:jammy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -65,7 +65,7 @@ RUN apt-get update && apt-get install -y \
     php-fpm \
     php-pgsql \
     php-intl \
-    postgresql-client-13 \
+    postgresql-client-14 \
     python3-datrie \
     python3-dotenv \
     python3-icu \
