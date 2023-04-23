@@ -34,7 +34,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-psutil \
     python3-psycopg2 \
     python3-yaml \
-    zip \
     zlib1g-dev
 
 ENV NOMINATIM_VERSION=4.2.3

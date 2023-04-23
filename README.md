@@ -4,7 +4,7 @@ Minimalistic Docker images for Nominatim
 ## About
 n7m is a [Numeronym](https://en.wikipedia.org/wiki/Numeronym) for [Nominatim](https://nominatim.org/).
 
-n7m is Nominatim packaged in Docker images with separation of responsibilities between housing the web server, ui, applicaiton server, setup processes, tests and PostgreSQL.
+n7m is Nominatim packaged in Docker images with separation of responsibilities between housing the web server, ui, applicaiton server, setup processes and PostgreSQL.
 
 ## Overview
 This set of Docker images seperates responsbility into 5 areas:
@@ -29,22 +29,22 @@ This set of Docker images seperates responsbility into 5 areas:
 +--------------+      +--------------+
               |        |
               v   80   v
-        +--------------+                  +--------------+
-        |              |                  |              |
-        |   n7m-app    |    /--------\    |     feed     |
-        |              |--->| volume |<---|              |
-        +--------------+    |  data  |    +--------------+
-        | ubuntu:jammy |    \--------/    |   n7m-app    |
-        +--------------+                  +--------------+
-                      |                    |
-                      v        5432        v 
-        /--------\    +--------------------+
-        | volume |<---|                    |
-        | pgdata |    |       n7m-gis      |
-        \--------/    +                    +
-                      |--------------------+ 
-                      |   postgis/postgis  |
-                      +--------------------+
+        +--------------+      +--------------+
+        |              |      |              |
+        |   n7m-app    |      |     feed     |
+        |              |      |              |
+        +--------------+      +--------------+
+        | ubuntu:jammy |      |   n7m-app    |
+        +--------------+      +--------------+
+                      |                 |   |
+                      v       5432      v   v
+        /--------\    +-----------------+   /--------\
+        | volume |<---|                 |   | volume |
+        | pgdata |    |     n7m-gis     |   |  data  |
+        \--------/    +                 +   \--------/
+                      |-----------------+ 
+                      | postgis/postgis |
+                      +-----------------+
 ```
 ## To Use
 1. Build all the images:
@@ -66,8 +66,6 @@ This set of Docker images seperates responsbility into 5 areas:
    * `docker-compose run feed setup`
 3. To update:
    * `docker-compose run feed update`
-3. To run unit tests:
-   * `docker-compose run app test`
 
 ## Configuration Hints
 For updates, consider these configurations:
@@ -93,8 +91,3 @@ To run n7m in AWS, the minimum EC2 Instance sizing is:
 * Storage: 500GB SSD (270G required for North America)
 
 Note:  At 16 GB RAM, `t3.xlarge` is too small and runs out of memory for osm2pgsql during a North America test.
-
-## Downloading data
-https://wiki.openstreetmap.org/wiki/Downloading_data
-
-docker run -v $PWD:/data openmaptiles/openmaptiles-tools download-osm
