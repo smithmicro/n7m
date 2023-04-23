@@ -6,6 +6,9 @@
 
 set -e
 
+# https://nominatim.org server requires a User Agent
+USER_AGENT="smithmicro/n7m-app"
+
 download() {
   DOWNLOAD_FILENAME=$(basename "$1")
   DOWNLOAD_PATH=/data/$DOWNLOAD_FILENAME
@@ -13,7 +16,7 @@ download() {
   if [ -s ${DOWNLOAD_PATH} ]; then
     echo "OSM file $DOWNLOAD_PATH already exists, skipping download"
   else
-    curl -L -o $DOWNLOAD_PATH $1
+    curl -L -A $USER_AGENT -o $DOWNLOAD_PATH $1
     if [ $? != 0 ]; then
       echo "Failed to download file $DOWNLOAD_FILENAME"
       exit 1
@@ -37,22 +40,22 @@ while [[ $# -gt 0 ]]; do
   case $1 in
     -w|--wiki)
       # improve the quality of search results
-      download https://www.nominatim.org/data/wikimedia-importance.sql.gz
+      download https://nominatim.org/data/wikimedia-importance.sql.gz
       shift
       ;;
     -u|--us-postal)
       # improve US postal code search
-      download https://www.nominatim.org/data/us_postcodes.csv.gz
+      download https://nominatim.org/data/us_postcodes.csv.gz
       shift
       ;;
     -k|--uk-postal)
       # improve UK postal code search
-      download https://www.nominatim.org/data/gb_postcodes.csv.gz
+      download https://nominatim.org/data/gb_postcodes.csv.gz
       shift
       ;;
     -g|--grid)
       # grab country grids
-      download https://www.nominatim.org/data/country_grid.sql.gz
+      download https://nominatim.org/data/country_grid.sql.gz
       shift
       ;;
     -h|--help)

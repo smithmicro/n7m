@@ -1,15 +1,14 @@
 FROM ubuntu:jammy AS build
 
-# https://nominatim.org/release-docs/develop/appendix/Install-on-Ubuntu-20/
-# Changes from the docs:
-# We do not need git
-# Other than that, upgraded to PostgreSQL 13 and alphabetized
+# https://nominatim.org/release-docs/develop/appendix/Install-on-Ubuntu-22/
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    ca-certificates \
     cmake \
     curl \
+    git \
     g++ \
     libboost-dev \
     libboost-filesystem-dev \
@@ -17,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     libbz2-dev \
     libexpat1-dev \
     libicu-dev \
+    liblua5.4-dev \
     libpq-dev \
     libproj-dev \
     php \
@@ -34,18 +34,20 @@ RUN apt-get update && apt-get install -y \
     python3-psutil \
     python3-psycopg2 \
     python3-yaml \
+    zip \
     zlib1g-dev
 
-ENV NOMINATIM_VERSION=4.0.1
+ENV NOMINATIM_VERSION=4.2.3
 
+# Fetch
 WORKDIR /nominatim
-
-# Build as install
 RUN curl -O -L http://www.nominatim.org/release/Nominatim-$NOMINATIM_VERSION.tar.bz2 \
  && tar xvf Nominatim-$NOMINATIM_VERSION.tar.bz2 \
- && mkdir build \
- && cd build \
- && cmake ../Nominatim-$NOMINATIM_VERSION \
+ && mv Nominatim-$NOMINATIM_VERSION Nominatim
+
+# Build as install
+WORKDIR /nominatim/build
+RUN cmake ../Nominatim \
  && make \
  && make install
 
@@ -55,10 +57,13 @@ FROM ubuntu:jammy
 ENV DEBIAN_FRONTEND=noninteractive
 
 # install dependencies of the built binaries
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     apache2 \
+    ca-certificates \
     curl \
     libapache2-mod-php \
+    libboost-filesystem-dev \
+    liblua5.4 \
     libproj-dev \
     php \
     php-cgi \
@@ -73,7 +78,9 @@ RUN apt-get update && apt-get install -y \
     python3-psutil \
     python3-psycopg2 \
     python3-pyosmium \
-    python3-yaml
+    python3-yaml \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 # For settings, see: https://nominatim.org/release-docs/develop/customize/Settings/
 ENV NOMINATIM_TOKENIZER=icu \

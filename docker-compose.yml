@@ -37,15 +37,6 @@ services:
     command: setup
     volumes:
       - ${PWD}/data:/data/
-  test:
-    build: test
-    image: smithmicro/n7m-test
-    environment:
-      - PGPASSWORD=n7m-geocoding
-    depends_on:
-      - gis
-    mem_limit: 200m
-    command: "true"
   gis:
     build: gis
     image: smithmicro/n7m-gis

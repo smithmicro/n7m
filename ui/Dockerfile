@@ -1,8 +1,8 @@
-FROM nginx:1.22-alpine
+FROM nginx:1.24-alpine
 
 # https://nominatim.org/release-docs/latest/admin/Setup-Nominatim-UI/
 
-ENV NOMINATIM_UI_VERSION=3.2.4
+ENV NOMINATIM_UI_VERSION=3.2.12
 ENV NOMINATIM_UI_FILENAME=nominatim-ui-$NOMINATIM_UI_VERSION
 ENV NOMINATIM_APINOMINATIM_API_ENDPOINT_URI=/api/v4/
 ENV NGINX_HTML_PATH=/usr/share/nginx/html
