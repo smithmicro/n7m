@@ -4,13 +4,12 @@ Minimalistic Docker images for Nominatim
 ## About
 n7m is a [Numeronym](https://en.wikipedia.org/wiki/Numeronym) for [Nominatim](https://nominatim.org/).
 
-n7m is Nominatim packaged in Docker images with separation of responsibilities between housing the web server, ui, applicaiton server, setup processes, tests and PostgreSQL.
+n7m is Nominatim packaged in Docker images with separation of responsibilities between housing the web server, ui, applicaiton server, setup processes and PostgreSQL.
 
 ## Overview
 This set of Docker images seperates responsbility into 5 areas:
 * **n7m-app** - The main Nomainatim service running Apache/PHP connecting to `n7m-gis`
   * **feed** - Uses the `n7m-app` image to set up the `n7m-gis` database.  Can also be used for updates and downloading files.
-* **n7m-test** - Runs all unit tests
 * **n7m-gis** - Postgis database 
 * **n7m-ui** - Test web user interface
 * **n7m-web** - nginx web sever that hosts:
@@ -30,22 +29,22 @@ This set of Docker images seperates responsbility into 5 areas:
 +--------------+      +--------------+
               |        |
               v   80   v
-        +--------------+     +--------------+     +--------------+
-        |              |     |              |     |              |
-        |   n7m-app    |     |   n7m-test   |     |     feed     |
-        |              |     |              |     |              |
-        +--------------+     +--------------+     +--------------+
-        |    debian    |     |    debian    |     |   n7m-app    |
-        +--------------+     +--------------+     +--------------+
-                      |             |              |        |
-                      v     5432    v              v        v
-        /--------\    +----------------------------+    /--------\
-        | volume |<---|                            |    | volume |
-        | pgdata |    |          n7m-gis           |    |  data  |
-        \--------/    +                            +    \--------/
-                      |----------------------------+ 
-                      |      postgis/postgis       |
-                      +----------------------------+
+        +--------------+      +--------------+
+        |              |      |              |
+        |   n7m-app    |      |     feed     |
+        |              |      |              |
+        +--------------+      +--------------+
+        | ubuntu:jammy |      |   n7m-app    |
+        +--------------+      +--------------+
+                      |                 |   |
+                      v       5432      v   v
+        /--------\    +-----------------+   /--------\
+        | volume |<---|                 |   | volume |
+        | pgdata |    |     n7m-gis     |   |  data  |
+        \--------/    +                 +   \--------/
+                      |-----------------+ 
+                      | postgis/postgis |
+                      +-----------------+
 ```
 ## To Use
 1. Build all the images:
@@ -67,28 +66,11 @@ This set of Docker images seperates responsbility into 5 areas:
    * `docker-compose run feed setup`
 3. To update:
    * `docker-compose run feed update`
-3. To run unit tests:
-   * `docker-compose run test make`
 
 ## Configuration Hints
 For updates, consider these configurations:
 * NOMINATIM_REPLICATION_MAX_DIFF - you will want to set this to a larger number.
 * NOMINATIM_REPLICATION_URL - you will want to set this to a closer mirror.
-
-## Ubuntu vs Debian
-`ubuntu:jammy` was selected as the base image for branch image as to begin testing the lastest LTS release.  Versions that are included below (at the time of this writing):
-* `debian:bullseye-slim`
-  * 454MB Image for `n7m-app`
-  * Python 3.9.2, PHP 7.4.28, psql 13.7
-* `ubuntu:focal`
-  * 485MB Image for `n7m-app`
-  * Python 3.8.10, PHP 7.4.3, psql 12.11
-* `debian:bookworm-slim` (not released)
-  * 501MB Image for `n7m-app`
-  * Python 3.10.5, PHP 8.1.5, psql 14.4
-* `ubuntu:jammy`
-  * 528MB Image for `n7m-app`
-  * Python 3.10.4, PHP 8.1.2, psql 14.3
 
 ## Advanced Tokenizer
 This image only uses the ICU Tokenizer.  By default the included `tokenizer.php` file drives the PHP code and has a simple English tokenizer.
@@ -109,8 +91,3 @@ To run n7m in AWS, the minimum EC2 Instance sizing is:
 * Storage: 500GB SSD (270G required for North America)
 
 Note:  At 16 GB RAM, `t3.xlarge` is too small and runs out of memory for osm2pgsql during a North America test.
-
-## Downloading data
-https://wiki.openstreetmap.org/wiki/Downloading_data
-
-docker run -v $PWD:/data openmaptiles/openmaptiles-tools download-osm
