@@ -96,7 +96,8 @@ if [ "$1" = 'update' ]; then
   exec nominatim replication --once --threads $PROCESSING_UNITS
 fi
 
-if [ "$1" = 'app' ]; then
+# Apache web server
+if [ "$1" = 'apache' ]; then
   waitForGis
   waitForGisDatabase nominatim
   a2enconf nominatim
@@ -108,6 +109,15 @@ if [ "$1" = 'app' ]; then
   
   # start apache in the foreground
   apachectl -D FOREGROUND
+fi
+
+# php-fpm
+if [ "$1" = 'fpm' ]; then
+  waitForGis
+  waitForGisDatabase nominatim
+  nominatim refresh --website --functions
+
+  exec php-fpm8.1 --allow-to-run-as-root
 fi
 
 exec "$@"

@@ -99,9 +99,10 @@ COPY --from=build /usr/local/share/nominatim/ /usr/local/share/nominatim/
 # copy shell scripts, english only tokenizer.php and Apache config
 COPY *.sh ./
 COPY tokenizer.php ./tokenizer/
-COPY *.conf /etc/apache2/conf-available/
+COPY nominatim.conf /etc/apache2/conf-available/
+COPY www.conf /etc/php/8.1/fpm/pool.d/
 
 ENTRYPOINT [ "./entrypoint.sh" ]
-CMD [ "app" ]
+CMD [ "fpm" ]
 
-EXPOSE 80
+EXPOSE 80 9000
