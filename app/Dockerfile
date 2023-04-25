@@ -57,15 +57,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # install dependencies of the built binaries
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    apache2 \
     ca-certificates \
     curl \
-    libapache2-mod-php \
     libboost-filesystem-dev \
     liblua5.4 \
     libproj-dev \
     php \
-    php-cgi \
     php-fpm \
     php-pgsql \
     php-intl \
@@ -97,10 +94,9 @@ COPY --from=build /usr/local/etc/nominatim/ /usr/local/etc/nominatim/
 COPY --from=build /usr/local/lib/nominatim/ /usr/local/lib/nominatim/
 COPY --from=build /usr/local/share/nominatim/ /usr/local/share/nominatim/
 
-# copy shell scripts, english only tokenizer.php and Apache config
+# copy shell scripts and english only tokenizer.php
 COPY *.sh ./
 COPY tokenizer.php ./tokenizer/
-COPY nominatim.conf /etc/apache2/conf-available/
 
 # fpm settings required for Docker
 RUN sed -i '1 i\[global]\nerror_log = /proc/self/fd/2\n' $FPM_CONFIG \

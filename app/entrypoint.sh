@@ -96,21 +96,6 @@ if [ "$1" = 'update' ]; then
   exec nominatim replication --once --threads $PROCESSING_UNITS
 fi
 
-# Apache web server - deprecate once the FPM solution stabilizes
-if [ "$1" = 'apache' ]; then
-  waitForGis
-  waitForGisDatabase nominatim
-  a2enconf nominatim
-  nominatim refresh --website --functions
-
-  # forward apache logs to docker logs - thanks nginx!
-  ln -sf /dev/stdout /var/log/apache2/access.log
-	ln -sf /dev/stderr /var/log/apache2/error.log
-  
-  # start apache in the foreground
-  apachectl -D FOREGROUND
-fi
-
 # php-fpm
 if [ "$1" = 'fpm' ]; then
   waitForGis

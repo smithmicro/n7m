@@ -8,7 +8,7 @@ n7m is Nominatim packaged in Docker images with separation of responsibilities b
 
 ## Overview
 This set of Docker images seperates responsbility into 5 areas:
-* **n7m-app** - The main Nomainatim service running Apache/PHP connecting to `n7m-gis`
+* **n7m-app** - The main Nomainatim service running PHP-FPM connecting to `n7m-gis`
   * **feed** - Uses the `n7m-app` image to set up the `n7m-gis` database.  Can also be used for updates and downloading files.
 * **n7m-gis** - Postgis database 
 * **n7m-ui** - Test web user interface
@@ -36,15 +36,15 @@ This set of Docker images seperates responsbility into 5 areas:
 +--------------+      +--------------+
 | ubuntu:jammy |      |   n7m-app    |
 +--------------+      +--------------+
-               |               |    |
-               v      5432     v    v
-/--------\    +-----------------+   /--------\
-| volume |<---|                 |   | volume |
-| pgdata |    |     n7m-gis     |   |  data  |
-\--------/    +                 +   \--------/
-              |-----------------+ 
-              | postgis/postgis |
-              +-----------------+
+               |              |     |
+               v      5432    v     v
+/--------\   +-----------------+   /--------\
+| volume |<--|                 |   | volume |
+| pgdata |   |     n7m-gis     |   |  data  |
+\--------/   +                 +   \--------/
+             |-----------------+
+             | postgis/postgis |
+             +-----------------+
 ```
 ## To Use
 1. Build all the images:
@@ -66,13 +66,6 @@ This set of Docker images seperates responsbility into 5 areas:
    * `docker-compose run feed setup`
 3. To update:
    * `docker-compose run feed update`
-
-## Modes for n7m-app
-This image supports two modes:
-* PHP-FPM on port 9000 (default)
-* Apache on port 80.  This can be used with the 'apache' command line argument.
-
-Note: The n7m-web image assumes n7m-app is running in PHP-FPM mode.  See the comments in site.conf for how to support Apache.
 
 ## Configuration Hints
 For updates, consider these configurations:
