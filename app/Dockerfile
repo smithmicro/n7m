@@ -86,7 +86,8 @@ ENV NOMINATIM_TOKENIZER=icu \
     PGHOST=gis \
     PGUSER=postgres \
     PGPASSWORD=change-this-password \
-    OSM_FILENAME=
+    OSM_FILENAME= \
+    FPM_CONFIG=/etc/php/8.1/fpm/pool.d/www.conf
 
 WORKDIR /nominatim
 
@@ -100,7 +101,11 @@ COPY --from=build /usr/local/share/nominatim/ /usr/local/share/nominatim/
 COPY *.sh ./
 COPY tokenizer.php ./tokenizer/
 COPY nominatim.conf /etc/apache2/conf-available/
-COPY www.conf /etc/php/8.1/fpm/pool.d/
+
+# fpm settings required for Docker
+RUN sed -i '1 i\[global]\nerror_log = /proc/self/fd/2\n' $FPM_CONFIG \
+ && sed -i 's|;access.log = log/$pool.access.log|access.log = /proc/self/fd/2|' $FPM_CONFIG \
+ && sed -i 's|listen = /run/php/php8.1-fpm.sock|listen = 9000|' $FPM_CONFIG
 
 ENTRYPOINT [ "./entrypoint.sh" ]
 CMD [ "fpm" ]

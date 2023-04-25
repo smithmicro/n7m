@@ -117,8 +117,8 @@ if [ "$1" = 'fpm' ]; then
   waitForGisDatabase nominatim
   nominatim refresh --website --functions
 
-  # www.conf tells php-fpm to run the foreground: 'daemonize = no'
-  exec php-fpm8.1
+  # run the foreground
+  exec php-fpm8.1 --nodaemonize
 fi
 
 exec "$@"
