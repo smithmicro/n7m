@@ -96,7 +96,7 @@ if [ "$1" = 'update' ]; then
   exec nominatim replication --once --threads $PROCESSING_UNITS
 fi
 
-# Apache web server
+# Apache web server - deprecate once the FPM solution stabilizes
 if [ "$1" = 'apache' ]; then
   waitForGis
   waitForGisDatabase nominatim
@@ -117,7 +117,8 @@ if [ "$1" = 'fpm' ]; then
   waitForGisDatabase nominatim
   nominatim refresh --website --functions
 
-  exec php-fpm8.1 --allow-to-run-as-root
+  # www.conf tells php-fpm to run the foreground: 'daemonize = no'
+  exec php-fpm8.1
 fi
 
 exec "$@"

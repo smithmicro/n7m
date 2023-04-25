@@ -18,8 +18,8 @@ This set of Docker images seperates responsbility into 5 areas:
 
 ## Architecture
 ```
-      |
-      v 8080
+       |
+       v 8080
 +--------------+      +--------------+
 |              |      |              |
 |   n7m-web    |----->|    n7m-ui    |
@@ -27,24 +27,24 @@ This set of Docker images seperates responsbility into 5 areas:
 +--------------+      +--------------+
 |    nginx     |      |    nginx     |
 +--------------+      +--------------+
-              |        |
-              v   80   v
-        +--------------+      +--------------+
-        |              |      |              |
-        |   n7m-app    |      |     feed     |
-        |              |      |              |
-        +--------------+      +--------------+
-        | ubuntu:jammy |      |   n7m-app    |
-        +--------------+      +--------------+
-                      |                 |   |
-                      v       5432      v   v
-        /--------\    +-----------------+   /--------\
-        | volume |<---|                 |   | volume |
-        | pgdata |    |     n7m-gis     |   |  data  |
-        \--------/    +                 +   \--------/
-                      |-----------------+ 
-                      | postgis/postgis |
-                      +-----------------+
+       |
+       v 9000
++--------------+      +--------------+
+|              |      |              |
+|   n7m-app    |      |     feed     |
+|              |      |              |
++--------------+      +--------------+
+| ubuntu:jammy |      |   n7m-app    |
++--------------+      +--------------+
+               |               |    |
+               v      5432     v    v
+/--------\    +-----------------+   /--------\
+| volume |<---|                 |   | volume |
+| pgdata |    |     n7m-gis     |   |  data  |
+\--------/    +                 +   \--------/
+              |-----------------+ 
+              | postgis/postgis |
+              +-----------------+
 ```
 ## To Use
 1. Build all the images:
@@ -66,6 +66,13 @@ This set of Docker images seperates responsbility into 5 areas:
    * `docker-compose run feed setup`
 3. To update:
    * `docker-compose run feed update`
+
+## Modes for n7m-app
+This image supports two modes:
+* PHP-FPM on port 9000 (default)
+* Apache on port 80.  This can be used with the 'apache' command line argument.
+
+Note: The n7m-web image assumes n7m-app is running in PHP-FPM mode.  See the comments in site.conf for how to support Apache.
 
 ## Configuration Hints
 For updates, consider these configurations:
