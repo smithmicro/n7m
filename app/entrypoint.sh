@@ -96,18 +96,14 @@ if [ "$1" = 'update' ]; then
   exec nominatim replication --once --threads $PROCESSING_UNITS
 fi
 
-if [ "$1" = 'app' ]; then
+# php-fpm
+if [ "$1" = 'fpm' ]; then
   waitForGis
   waitForGisDatabase nominatim
-  a2enconf nominatim
   nominatim refresh --website --functions
 
-  # forward apache logs to docker logs - thanks nginx!
-  ln -sf /dev/stdout /var/log/apache2/access.log
-	ln -sf /dev/stderr /var/log/apache2/error.log
-  
-  # start apache in the foreground
-  apachectl -D FOREGROUND
+  # run the foreground
+  exec php-fpm8.1 --nodaemonize
 fi
 
 exec "$@"

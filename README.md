@@ -8,7 +8,7 @@ n7m is Nominatim packaged in Docker images with separation of responsibilities b
 
 ## Overview
 This set of Docker images seperates responsbility into 5 areas:
-* **n7m-app** - The main Nomainatim service running Apache/PHP connecting to `n7m-gis`
+* **n7m-app** - The main Nomainatim service running PHP-FPM connecting to `n7m-gis`
   * **feed** - Uses the `n7m-app` image to set up the `n7m-gis` database.  Can also be used for updates and downloading files.
 * **n7m-gis** - Postgis database 
 * **n7m-ui** - Test web user interface
@@ -18,8 +18,8 @@ This set of Docker images seperates responsbility into 5 areas:
 
 ## Architecture
 ```
-      |
-      v 8080
+       |
+       v 8080
 +--------------+      +--------------+
 |              |      |              |
 |   n7m-web    |----->|    n7m-ui    |
@@ -27,24 +27,24 @@ This set of Docker images seperates responsbility into 5 areas:
 +--------------+      +--------------+
 |    nginx     |      |    nginx     |
 +--------------+      +--------------+
-              |        |
-              v   80   v
-        +--------------+      +--------------+
-        |              |      |              |
-        |   n7m-app    |      |     feed     |
-        |              |      |              |
-        +--------------+      +--------------+
-        | ubuntu:jammy |      |   n7m-app    |
-        +--------------+      +--------------+
-                      |                 |   |
-                      v       5432      v   v
-        /--------\    +-----------------+   /--------\
-        | volume |<---|                 |   | volume |
-        | pgdata |    |     n7m-gis     |   |  data  |
-        \--------/    +                 +   \--------/
-                      |-----------------+ 
-                      | postgis/postgis |
-                      +-----------------+
+       |
+       v 9000
++--------------+      +--------------+
+|              |      |              |
+|   n7m-app    |      |     feed     |
+|              |      |              |
++--------------+      +--------------+
+| ubuntu:jammy |      |   n7m-app    |
++--------------+      +--------------+
+               |              |     |
+               v      5432    v     v
+/--------\   +-----------------+   /--------\
+| volume |<--|                 |   | volume |
+| pgdata |   |     n7m-gis     |   |  data  |
+\--------/   +                 +   \--------/
+             |-----------------+
+             | postgis/postgis |
+             +-----------------+
 ```
 ## To Use
 1. Build all the images:

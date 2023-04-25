@@ -15,8 +15,6 @@ services:
     build: ui
     image: smithmicro/n7m-ui
     restart: always
-    depends_on:
-      - app
     mem_limit: 100m
   app:
     build: app
