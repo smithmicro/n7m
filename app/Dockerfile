@@ -44,7 +44,7 @@ RUN curl -O -L http://www.nominatim.org/release/Nominatim-$NOMINATIM_VERSION.tar
  && tar xvf Nominatim-$NOMINATIM_VERSION.tar.bz2 \
  && mv Nominatim-$NOMINATIM_VERSION Nominatim
 
-# Build as install
+# Build and install
 WORKDIR /nominatim/build
 RUN cmake ../Nominatim \
  && make \
@@ -106,4 +106,4 @@ RUN sed -i '1 i\[global]\nerror_log = /proc/self/fd/2\n' $FPM_CONFIG \
 ENTRYPOINT [ "./entrypoint.sh" ]
 CMD [ "fpm" ]
 
-EXPOSE 80 9000
+EXPOSE 9000
