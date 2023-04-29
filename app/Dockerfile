@@ -62,6 +62,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-jinja2 \
     python3-psutil \
     python3-psycopg2 \
+    python3-pyosmium \
     python3-sqlalchemy \
     python3-yaml \
  && apt-get clean \
