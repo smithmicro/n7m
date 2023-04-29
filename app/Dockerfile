@@ -83,9 +83,8 @@ COPY --from=build /usr/local/etc/nominatim/ /usr/local/etc/nominatim/
 COPY --from=build /usr/local/lib/nominatim/ /usr/local/lib/nominatim/
 COPY --from=build /usr/local/share/nominatim/ /usr/local/share/nominatim/
 
-# copy shell scripts and english only tokenizer.php
+# copy shell scripts
 COPY *.sh ./
-COPY tokenizer.php ./tokenizer/
 
 # fpm settings required for Docker
 RUN sed -i '1 i\[global]\nerror_log = /proc/self/fd/2\n' $FPM_CONFIG \
