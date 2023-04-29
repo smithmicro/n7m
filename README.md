@@ -72,19 +72,6 @@ For updates, consider these configurations:
 * NOMINATIM_REPLICATION_MAX_DIFF - you will want to set this to a larger number.
 * NOMINATIM_REPLICATION_URL - you will want to set this to a closer mirror.
 
-## Advanced Tokenizer
-This image only uses the ICU Tokenizer.  By default the included `tokenizer.php` file drives the PHP code and has a simple English tokenizer.
-
-To have the App use the tokenizer created by the `n7m-feed` container, you can share it into the `n7m-app` container like this in the included `docker-compose.yaml`:
-```
-  app:
-    image: n7m-app
-    # ...
-    volumes:
-      - ${PWD}/data/tokenizer/:/nominatim/tokenizer/    
-```
-Note: this maps the tokenizer created by `n7m-feed` into the `n7m-app` container.
-
 ## AWS EC2
 To run n7m in AWS, the minimum EC2 Instance sizing is:
 * Instance: `t3.2xlarge` - 32 GB RAM, 8 vCPUs

@@ -20,20 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     libproj-dev \
     php \
-    php-cgi \
-    php-pgsql \
-    php-intl \
-    postgresql-14-postgis-3 \
-    postgresql-14-postgis-3-scripts \
-    postgresql-contrib-14 \
-    postgresql-server-dev-14 \
-    python3-datrie \
-    python3-dotenv \
-    python3-icu \
-    python3-jinja2 \
-    python3-psutil \
-    python3-psycopg2 \
-    python3-yaml \
+    python3 \
     zlib1g-dev
 
 ENV NOMINATIM_VERSION=4.2.3
@@ -67,13 +54,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     php-pgsql \
     php-intl \
     postgresql-client-14 \
+    python3-asyncpg \
     python3-datrie \
     python3-dotenv \
+    python3-geoalchemy2 \
     python3-icu \
     python3-jinja2 \
     python3-psutil \
     python3-psycopg2 \
-    python3-pyosmium \
+    python3-sqlalchemy \
     python3-yaml \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
@@ -94,14 +83,14 @@ COPY --from=build /usr/local/etc/nominatim/ /usr/local/etc/nominatim/
 COPY --from=build /usr/local/lib/nominatim/ /usr/local/lib/nominatim/
 COPY --from=build /usr/local/share/nominatim/ /usr/local/share/nominatim/
 
-# copy shell scripts and english only tokenizer.php
+# copy shell scripts
 COPY *.sh ./
-COPY tokenizer.php ./tokenizer/
 
 # fpm settings required for Docker
 RUN sed -i '1 i\[global]\nerror_log = /proc/self/fd/2\n' $FPM_CONFIG \
  && sed -i 's|;access.log = log/$pool.access.log|access.log = /proc/self/fd/2|' $FPM_CONFIG \
- && sed -i 's|listen = /run/php/php8.1-fpm.sock|listen = 9000|' $FPM_CONFIG
+ && sed -i 's|listen = /run/php/php8.1-fpm.sock|listen = 9000|' $FPM_CONFIG \
+ && ln -s /usr/sbin/php-fpm8.1 /usr/sbin/php-fpm
 
 ENTRYPOINT [ "./entrypoint.sh" ]
 CMD [ "fpm" ]
