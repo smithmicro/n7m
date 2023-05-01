@@ -32,6 +32,9 @@ services:
     environment:
       - PGPASSWORD=n7m-geocoding
       - OSM_FILENAME=monaco-latest.osm.pbf
+      - NOMINATIM_REPLICATION_URL=https://download.geofabrik.de/europe/monaco-updates
+      - NOMINATIM_REPLICATION_MAX_DIFF=3000
+      - NOMINATIM_REPLICATION_UPDATE_INTERVAL=86400
     command: setup
     volumes:
       - ${PWD}/data:/data/
