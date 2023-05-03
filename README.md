@@ -64,8 +64,10 @@ This set of Docker images seperates responsbility into 5 areas:
    * `docker-compose run feed reset`
 2. To run setup again:
    * `docker-compose run feed setup`
-3. To update:
+3. To update once:
    * `docker-compose run feed update`
+4. To run replication:
+   * `docker-compose run feed replication`
 
 ## Configuration Hints
 For updates, consider these configurations:
@@ -77,4 +79,16 @@ To run n7m in AWS, the minimum EC2 Instance sizing is:
 * Instance: `t3.2xlarge` - 32 GB RAM, 8 vCPUs
 * Storage: 500GB SSD (270G required for North America)
 
-Note:  At 16 GB RAM, `t3.xlarge` is too small and runs out of memory for osm2pgsql during a North America test.
+### Instance Comparison
+* Instance: `m5.4xlarge` - 64 GB RAM, 16 vCPUs, 0.768/Hour
+  * North America:  14.12 hours = $10.84
+* Instance: `m5.8xlarge` - 128 GB RAM, 32 vCPUs, 1.536/Hour
+  * North America:  10.57 hours = $16.23
+
+Note:  At 32 GB RAM, `t3.2xlarge` is too small and stalls when attempting a North America import.
+
+## Resources
+https://www.openstreetmap.org/about
+http://download.geofabrik.de/
+https://daylightmap.org/
+https://overturemaps.org/download/

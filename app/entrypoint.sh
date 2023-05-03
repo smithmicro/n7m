@@ -84,6 +84,7 @@ if [ "$1" = 'update' ]; then
   # any scheduling should be done outside this container
   
   # set this if you want to be more aggressive 
+  # https://nominatim.org/release-docs/latest/customize/Settings/
   # NOMINATIM_REPLICATION_MAX_DIFF=3000
 
   waitForGis
@@ -96,13 +97,25 @@ if [ "$1" = 'update' ]; then
   exec nominatim replication --once --threads $PROCESSING_UNITS
 fi
 
+if [ "$1" = 'replication' ]; then
+  # run replication with any additonal command line options
+  waitForGis
+  waitForGisDatabase nominatim
+
+  echo "Starting Update"
+  echo "Number of processing units: $PROCESSING_UNITS"
+
+  nominatim replication --init
+  exec nominatim "$@" --threads $PROCESSING_UNITS
+fi
+
 # php-fpm
 if [ "$1" = 'fpm' ]; then
   waitForGis
   waitForGisDatabase nominatim
   nominatim refresh --website --functions
 
-  # run the foreground
+  # run in the foreground
   exec php-fpm --nodaemonize
 fi
 
