@@ -25,13 +25,13 @@ download() {
 }
 
 help() {
-  echo "download [-n|-m|-w|-u|-k|-g|-h] [long options see below]"
-  echo "  -w|--wiki -      Wikimedia file to improve search"
-  echo "  -u|--us-postal - US postal code data"
-  echo "  -k|--uk-postal - UK postal code data"
+  echo "download [-g|-h|-k|-p|-u|-w]"
   echo "  -g|--grid -      country grids"
-  echo "  -o|--overture -  Overture Maps Planet file"
   echo "  -h|--help -      this help screen"
+  echo "  -k|--uk-postal - UK postal code data"
+  echo "  -p|--planet -    Overture Maps Planet file"
+  echo "  -u|--us-postal - US postal code data"
+  echo "  -w|--wiki -      Wikimedia file to improve search"
 }
 
 # Files discussed here:
@@ -59,7 +59,7 @@ while [[ $# -gt 0 ]]; do
       download https://nominatim.org/data/country_grid.sql.gz
       shift
       ;;
-    -o|--overture)
+    -p|--planet)
       # Overture Maps Planet file: https://overturemaps.org/download/
       OVERTURE_VERSION=2023-04-02-alpha
       download https://overturemaps-us-west-2.s3.amazonaws.com/release/$OVERTURE_VERSION/planet-$OVERTURE_VERSION.osm.pbf

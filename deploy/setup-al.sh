@@ -19,5 +19,15 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose run feed download --wiki --grid
 docker run -v /data/data:/tileset openmaptiles/openmaptiles-tools download-osm north-america
 
-# Start the import
+# Setup
 docker-compose up -d
+
+# bail out here 
+exit
+
+# to download and execute this:
+N7M_VERSION=v0.9.5 \
+ && curl -O -L https://github.com/smithmicro/n7m/archive/refs/tags/$N7M_VERSION.tar.gz \
+ && tar xvf $N7M_VERSION.tar.gz --strip-components=1 \
+ && cd deploy \
+./setup-al.sh
