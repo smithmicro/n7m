@@ -79,13 +79,13 @@ To run n7m in AWS, the minimum EC2 Instance sizing is:
 * Instance: `t3.2xlarge` - 32 GB RAM, 8 vCPUs
 * Storage: 500GB SSD (270G required for North America)
 
-### Instnace Comparison
-* Instance: `t3.2xlarge` - 32 GB RAM, 8 vCPUs, 0.3328/Hour
- * Noth America:  
+### Instance Comparison
+* Instance: `m5.4xlarge` - 64 GB RAM, 16 vCPUs, 0.768/Hour
+  * North America:  14.12 hours = $10.84
 * Instance: `m5.8xlarge` - 128 GB RAM, 32 vCPUs, 1.536/Hour
- * Noth America:  10.57 hours
+  * North America:  10.57 hours = $16.23
 
-Note:  At 16 GB RAM, `t3.xlarge` is too small and runs out of memory for osm2pgsql during a North America test.
+Note:  At 32 GB RAM, `t3.2xlarge` is too small and stalls when attempting a North America import.
 
 ## Resources
 https://www.openstreetmap.org/about
