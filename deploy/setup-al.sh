@@ -20,7 +20,7 @@ docker-compose run feed download --wiki --grid
 docker run -v /data/data:/tileset openmaptiles/openmaptiles-tools download-osm north-america
 
 # Setup
-docker-compose up -d
+docker-compose -f docker-compose-setup.yml up -d
 
 # bail out here 
 exit

@@ -1,4 +1,7 @@
-FROM postgis/postgis:14-3.3-alpine
+FROM postgis/postgis:15-3.3-alpine
+
+# Faster imports with PostgreSQL 15
+# https://osm2pgsql.org/news/2023/01/22/faster-with-postgresql15.html
 
 # Nominatim recommended configuration
 COPY --chown=postgres:postgres postgresql.conf /etc/postgresql/postgresql.conf

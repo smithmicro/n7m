@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  feed:
+    image: smithmicro/n7m-app
+    depends_on:
+      - gis
+    environment:
+      - PGPASSWORD=n7m-geocoding
+      - OSM_FILENAME=north-america-latest.osm.pbf
+    command: setup
+    volumes:
+      - /data/data:/data/
+    shm_size: 1gb
+  gis:
+    image: smithmicro/n7m-gis
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=n7m-geocoding
+    volumes:
+      - /data/pgdata:/var/lib/postgresql/data
+    shm_size: 1gb

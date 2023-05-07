@@ -76,8 +76,8 @@ For updates, consider these configurations:
 
 ## AWS EC2
 To run n7m in AWS, the minimum EC2 Instance sizing is:
-* Instance: `t3.2xlarge` - 32 GB RAM, 8 vCPUs
-* Storage: 500GB SSD (270G required for North America)
+* Instance: `m5.4xlarge` - 64 GB RAM, 16 vCPUs
+* Storage: 350GB SSD for North America
 
 ### Instance Comparison
 * Instance: `m5.4xlarge` - 64 GB RAM, 16 vCPUs, 0.768/Hour
@@ -85,10 +85,9 @@ To run n7m in AWS, the minimum EC2 Instance sizing is:
 * Instance: `m5.8xlarge` - 128 GB RAM, 32 vCPUs, 1.536/Hour
   * North America:  10.57 hours = $16.23
 
-Note:  At 32 GB RAM, `t3.2xlarge` is too small and stalls when attempting a North America import.
-
 ## Resources
-https://www.openstreetmap.org/about
-http://download.geofabrik.de/
-https://daylightmap.org/
-https://overturemaps.org/download/
+* [Nominatim Web Site](https://nominatim.org/)
+* [Finding places: an introduction to Nominatim](https://www.youtube.com/watch?v=Q4zgDWY8ng0)
+* [OpenStreetMap](https://www.openstreetmap.org/about)
+* [OpenStreetMap Data Extracts](http://download.geofabrik.de/)
+* [Overture Maps Data](https://overturemaps.org/download/)
