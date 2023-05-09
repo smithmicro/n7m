@@ -31,4 +31,4 @@ N7M_VERSION=v0.9.5 \
  && curl -O -L https://github.com/smithmicro/n7m/archive/refs/tags/$N7M_VERSION.tar.gz \
  && tar xvf $N7M_VERSION.tar.gz --strip-components=1 \
  && cd deploy \
-./setup-al.sh
+ && ./setup-al.sh
