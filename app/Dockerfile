@@ -33,7 +33,7 @@ RUN curl -O -L http://www.nominatim.org/release/Nominatim-$NOMINATIM_VERSION.tar
 
 # Build and install
 WORKDIR /nominatim/build
-RUN cmake ../Nominatim \
+RUN cmake ../Nominatim -DBoost_USE_STATIC_LIBS=ON \
  && make \
  && make install
 
@@ -46,7 +46,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
-    libboost-filesystem-dev \
     liblua5.4 \
     libproj-dev \
     php \

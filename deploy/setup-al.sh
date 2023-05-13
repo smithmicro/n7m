@@ -6,7 +6,8 @@ set -e
 # Docker
 sudo yum update
 sudo yum install docker -y
-sudo service docker start
+sudo systemctl enable docker
+sudo systemctl start docker
 sudo usermod -a -G docker ec2-user
 newgrp docker
 
@@ -20,7 +21,7 @@ docker-compose run feed download --wiki --grid
 docker run -v /data/data:/tileset openmaptiles/openmaptiles-tools download-osm north-america
 
 # Setup
-docker-compose up -d
+docker-compose -f docker-compose-setup.yml up -d
 
 # bail out here 
 exit
@@ -30,4 +31,4 @@ N7M_VERSION=v0.9.5 \
  && curl -O -L https://github.com/smithmicro/n7m/archive/refs/tags/$N7M_VERSION.tar.gz \
  && tar xvf $N7M_VERSION.tar.gz --strip-components=1 \
  && cd deploy \
-./setup-al.sh
+ && ./setup-al.sh
