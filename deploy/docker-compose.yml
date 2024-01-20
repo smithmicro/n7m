@@ -2,7 +2,7 @@ version: '2'
 
 services:
   web:
-    image: smithmicro/n7m-web:4.2
+    image: smithmicro/n7m-web:4.3
     restart: always
     ports:
       - "80:80"
@@ -11,16 +11,17 @@ services:
       - ui
     mem_limit: 100m
   ui:
-    image: smithmicro/n7m-ui:3.2
+    image: smithmicro/n7m-ui:3.4
     restart: always
     mem_limit: 100m
   app:
-    image: smithmicro/n7m-app:4.2
+    image: smithmicro/n7m-app:4.3
     restart: always
     depends_on:
       - gis
     environment:
       - PGPASSWORD=n7m-geocoding
+      - WEB_CONCURRENCY=4
   gis:
     image: postgis/postgis:15-3.3-alpine
     restart: always

@@ -8,7 +8,7 @@ n7m is Nominatim packaged in Docker images with separation of responsibilities b
 
 ## Overview
 This set of Docker images seperates responsbility into 5 areas:
-* **n7m-app** - The main Nomainatim service running PHP-FPM connecting to `n7m-gis`
+* **n7m-app** - The main Nomainatim service running uvicorn connecting to `n7m-gis`
   * **feed** - Uses the `n7m-app` image to set up the `n7m-gis` database.  Can also be used for updates and downloading files.
 * **n7m-gis** - Postgis database 
 * **n7m-ui** - Test web user interface
