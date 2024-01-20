@@ -84,7 +84,7 @@ COPY --from=build /usr/local/lib/nominatim/ /usr/local/lib/nominatim/
 COPY --from=build /usr/local/share/nominatim/ /usr/local/share/nominatim/
 
 # copy shell scripts
-COPY *.sh ./
+COPY --chmod=0755 *.sh ./
 
 # fpm settings required for Docker
 RUN sed -i '1 i\[global]\nerror_log = /proc/self/fd/2\n' $FPM_CONFIG \
