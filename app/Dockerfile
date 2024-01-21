@@ -86,6 +86,6 @@ COPY --from=build /usr/local/share/nominatim/ /usr/local/share/nominatim/
 COPY --chmod=0755 *.sh ./
 
 ENTRYPOINT [ "./entrypoint.sh" ]
-CMD [ "uvicorn" ]
+CMD [ "app" ]
 
 EXPOSE 8000

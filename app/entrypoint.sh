@@ -109,8 +109,8 @@ if [ "$1" = 'replication' ]; then
   exec nominatim "$@" --threads $PROCESSING_UNITS
 fi
 
-# uvicorn ASGI
-if [ "$1" = 'uvicorn' ]; then
+if [ "$1" = 'app' ]; then
+  # uvicorn ASGI
   waitForGis
   waitForGisDatabase nominatim
 
