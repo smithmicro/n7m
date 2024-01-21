@@ -38,7 +38,7 @@ services:
       - NOMINATIM_REPLICATION_UPDATE_INTERVAL=86400
     command: setup
     volumes:
-      - ${PWD}/data:/data/
+      - ./data:/data/
   gis:
     build: gis
     image: smithmicro/n7m-gis:15

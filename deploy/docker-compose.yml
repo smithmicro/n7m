@@ -23,7 +23,7 @@ services:
       - PGPASSWORD=n7m-geocoding
       - WEB_CONCURRENCY=4
   gis:
-    image: postgis/postgis:15-3.3-alpine
+    image: smithmicro/n7m-gis:15
     restart: always
     environment:
       - POSTGRES_PASSWORD=n7m-geocoding
