@@ -8,7 +8,7 @@ n7m is Nominatim packaged in Docker images with separation of responsibilities b
 
 ## Overview
 This set of Docker images seperates responsbility into 5 areas:
-* **n7m-app** - The main Nomainatim service running PHP-FPM connecting to `n7m-gis`
+* **n7m-app** - The main Nomainatim service running uvicorn connecting to `n7m-gis`
   * **feed** - Uses the `n7m-app` image to set up the `n7m-gis` database.  Can also be used for updates and downloading files.
 * **n7m-gis** - Postgis database 
 * **n7m-ui** - Test web user interface
@@ -28,7 +28,7 @@ This set of Docker images seperates responsbility into 5 areas:
 |    nginx     |      |    nginx     |
 +--------------+      +--------------+
        |
-       v 9000
+       v 8000
 +--------------+      +--------------+
 |              |      |              |
 |   n7m-app    |      |     feed     |
@@ -52,8 +52,8 @@ This set of Docker images seperates responsbility into 5 areas:
 2. Download Wikimedia data and country grids (optional):
    * `docker-compose run feed download --wiki --grid`
 3. Download OSM Data.  We recommend [openmaptiles-tools](https://github.com/openmaptiles/openmaptiles-tools).  For Monaco:
-   * `docker run -v $PWD/data:/tileset openmaptiles/openmaptiles-tools download-osm monaco`
-4. Edit the OSM_FILENAME environment varianble in `docker-compose.yml` file to select the downloaded OSM file.
+   * `docker run -v <path to working dir>/data:/tileset openmaptiles/openmaptiles-tools download-osm monaco`
+4. Edit the OSM_FILENAME environment variable in `docker-compose.yml` file to select the downloaded OSM file.
    * The default is `monaco-latest.osm.pbf` which was downloaded in step 3.
 5. Run `docker-compose up`
    * Since the import process is long, the `n7m-app` container terminates after 10 seconds.  Run `docker-compose up` again after import so it restarts.

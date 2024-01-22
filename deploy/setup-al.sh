@@ -27,7 +27,7 @@ docker-compose -f docker-compose-setup.yml up -d
 exit
 
 # to download and execute this:
-N7M_VERSION=v0.9.5 \
+N7M_VERSION=v0.9.7 \
  && curl -O -L https://github.com/smithmicro/n7m/archive/refs/tags/$N7M_VERSION.tar.gz \
  && tar xvf $N7M_VERSION.tar.gz --strip-components=1 \
  && cd deploy \

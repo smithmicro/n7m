@@ -19,11 +19,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     liblua5.4-dev \
     libpq-dev \
     libproj-dev \
+    nlohmann-json3-dev \
     php \
     python3 \
     zlib1g-dev
 
-ENV NOMINATIM_VERSION=4.2.3
+ENV NOMINATIM_VERSION=4.3.2
 
 # Fetch
 WORKDIR /nominatim
@@ -48,20 +49,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     liblua5.4 \
     libproj-dev \
-    php \
-    php-fpm \
-    php-pgsql \
-    php-intl \
     postgresql-client-14 \
     python3-asyncpg \
     python3-datrie \
     python3-dotenv \
+    python3-falcon \
     python3-geoalchemy2 \
     python3-icu \
     python3-jinja2 \
     python3-psutil \
     python3-psycopg2 \
     python3-pyosmium \
+    python3-uvicorn \
     python3-sqlalchemy \
     python3-yaml \
  && apt-get clean \
@@ -73,7 +72,7 @@ ENV NOMINATIM_TOKENIZER=icu \
     PGUSER=postgres \
     PGPASSWORD=change-this-password \
     OSM_FILENAME= \
-    FPM_CONFIG=/etc/php/8.1/fpm/pool.d/www.conf
+    WEB_CONCURRENCY=1
 
 WORKDIR /nominatim
 
@@ -86,13 +85,7 @@ COPY --from=build /usr/local/share/nominatim/ /usr/local/share/nominatim/
 # copy shell scripts
 COPY --chmod=0755 *.sh ./
 
-# fpm settings required for Docker
-RUN sed -i '1 i\[global]\nerror_log = /proc/self/fd/2\n' $FPM_CONFIG \
- && sed -i 's|;access.log = log/$pool.access.log|access.log = /proc/self/fd/2|' $FPM_CONFIG \
- && sed -i 's|listen = /run/php/php8.1-fpm.sock|listen = 9000|' $FPM_CONFIG \
- && ln -s /usr/sbin/php-fpm8.1 /usr/sbin/php-fpm
-
 ENTRYPOINT [ "./entrypoint.sh" ]
-CMD [ "fpm" ]
+CMD [ "app" ]
 
-EXPOSE 9000
+EXPOSE 8000
