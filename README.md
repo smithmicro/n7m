@@ -28,7 +28,7 @@ This set of Docker images seperates responsbility into 5 areas:
 |    nginx     |      |    nginx     |
 +--------------+      +--------------+
        |
-       v 9000
+       v 8000
 +--------------+      +--------------+
 |              |      |              |
 |   n7m-app    |      |     feed     |
