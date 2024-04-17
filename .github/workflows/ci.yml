@@ -90,10 +90,10 @@ jobs:
 
       - name: Start docker containers and setup DB
         run: |-
-          echo "::notice:Starting containers"
+          echo "::notice::Starting containers"
           docker compose -f docker-compose.yml -f .github/docker-compose.ci.yml up --wait --wait-timeout 120 --pull never --no-build web
           
-          echo "::notice:Starting setup"
+          echo "::notice::Starting setup"
           docker compose -f docker-compose.yml -f .github/docker-compose.ci.yml up --pull never --no-build feed
       
       - name: Test API health
