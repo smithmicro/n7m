@@ -1,0 +1,22 @@
+# Compose file overriding the `base` copmose file.
+# It disables the `restart` policy, to check that the containers do not restart unexpectedly
+
+services:
+  web:
+    restart: 'no'
+
+  ui:
+    restart: 'no'
+
+  app:
+    restart: 'no'
+  
+  gis:
+    restart: 'no'
+    # Define a healthcheck to wait for the postgres container to be online
+    healthcheck:
+      test: ["pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 120s

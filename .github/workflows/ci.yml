@@ -78,7 +78,7 @@ jobs:
       
       - name: Start all services
         run: |-
-          docker compose up --wait --wait-timeout 120 --pull never --no-build
+          docker compose up -f docker-compose.yml -f .github/docker-compose.ci.yml --wait --wait-timeout 120 --pull never --no-build
       
       - name: Test API health
         run: |-
