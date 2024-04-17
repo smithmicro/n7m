@@ -20,13 +20,34 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Cache
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            var-cache-apt
+            var-lib-apt
+          key: cache-${{ hashFiles('app/Dockerfile') }}
+
+      - name: inject cache into docker
+        uses: reproducible-containers/buildkit-cache-dance@v3.1.0
+        with:
+          cache-map: |
+            {
+              "var-cache-apt": "/var/cache/apt",
+              "var-lib-apt": "/var/lib/apt"
+            }
+          skip-extraction: ${{ steps.cache.outputs.cache-hit }}
+
       - name: Build and export image
         uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.service }}
           tags: smithmicro/n7m-${{ matrix.service }}:latest
-          outputs: type=docker,dest=/tmp/${{ matrix.service }}.tar
-      
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outzputs: type=docker,dest=/tmp/${{ matrix.service }}.tar
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
