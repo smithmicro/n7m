@@ -1,3 +1,5 @@
+name: Build and test containers
+
 on:
   pull_request:
   push:
@@ -20,24 +22,24 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Cache
-        uses: actions/cache@v3
-        id: cache
-        with:
-          path: |
-            var-cache-apt
-            var-lib-apt
-          key: cache-${{ matrix.service }}-${{ hashFiles('app/Dockerfile') }}
+      # - name: Cache
+      #   uses: actions/cache@v3
+      #   id: cache
+      #   with:
+      #     path: |
+      #       var-cache-apt
+      #       var-lib-apt
+      #     key: cache-${{ matrix.service }}-${{ hashFiles( format('{0}/{1}', matrix.service, 'Dockerfile')) }}
 
-      - name: inject cache into docker
-        uses: reproducible-containers/buildkit-cache-dance@v3.1.0
-        with:
-          cache-map: |
-            {
-              "var-cache-apt": "/var/cache/apt",
-              "var-lib-apt": "/var/lib/apt"
-            }
-          skip-extraction: ${{ steps.cache.outputs.cache-hit }}
+      # - name: inject cache into docker
+      #   uses: reproducible-containers/buildkit-cache-dance@v3.1.0
+      #   with:
+      #     cache-map: |
+      #       {
+      #         "var-cache-apt": "/var/cache/apt",
+      #         "var-lib-apt": "/var/lib/apt"
+      #       }
+      #     skip-extraction: ${{ steps.cache.outputs.cache-hit }}
 
       - name: Build and export image
         uses: docker/build-push-action@v5
@@ -65,7 +67,7 @@ jobs:
           merge-multiple: true
           path: /tmp
 
-      - name: Load images
+      - name: Load docker images
         run: |-
           docker load --input /tmp/app.tar
           docker load --input /tmp/gis.tar
@@ -76,9 +78,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Start all services
+      - name: Cache OSM data
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: monaco-osm
+
+      - name: Download initial OSM data
         run: |-
-          docker compose up -f docker-compose.yml -f .github/docker-compose.ci.yml --wait --wait-timeout 120 --pull never --no-build
+          wget --timestamping --directory-prefix=./data https://download.geofabrik.de/europe/monaco-latest.osm.pbf
+
+      - name: Start docker containers and setup DB
+        run: |-
+          echo "::notice:Starting containers"
+          docker compose -f docker-compose.yml -f .github/docker-compose.ci.yml up --wait --wait-timeout 120 --pull never --no-build web
+          
+          echo "::notice:Starting setup"
+          docker compose -f docker-compose.yml -f .github/docker-compose.ci.yml up --pull never --no-build feed
       
       - name: Test API health
         run: |-
