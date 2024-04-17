@@ -27,7 +27,7 @@ jobs:
           path: |
             var-cache-apt
             var-lib-apt
-          key: cache-${{ hashFiles('app/Dockerfile') }}
+          key: cache-${{ matrix.service }}-${{ hashFiles('app/Dockerfile') }}
 
       - name: inject cache into docker
         uses: reproducible-containers/buildkit-cache-dance@v3.1.0
@@ -46,7 +46,7 @@ jobs:
           tags: smithmicro/n7m-${{ matrix.service }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          outzputs: type=docker,dest=/tmp/${{ matrix.service }}.tar
+          outputs: type=docker,dest=/tmp/${{ matrix.service }}.tar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -79,5 +79,7 @@ jobs:
       - name: Start all services
         run: |-
           docker compose up --wait --wait-timeout 120 --pull never --no-build
-          curl --fail-with-body http://localhost:8080/
-        
+      
+      - name: Test API health
+        run: |-
+          curl --fail-with-body http://localhost:8080/health
