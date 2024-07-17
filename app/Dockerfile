@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     zlib1g-dev
 
-ENV NOMINATIM_VERSION=4.3.2
+ENV NOMINATIM_VERSION=4.4.0
 
 # Fetch
 WORKDIR /nominatim

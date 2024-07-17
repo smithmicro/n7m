@@ -1,3 +1,3 @@
-FROM nginx:1.24-alpine
+FROM nginx:1.27-alpine
 
 COPY site.conf /etc/nginx/conf.d/default.conf

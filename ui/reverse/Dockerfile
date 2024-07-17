@@ -1,4 +1,4 @@
-FROM smithmicro/n7m-ui:3.4
+FROM smithmicro/n7m-ui:latest
 
 # required configuration for a Reverse Geocode only UI
 RUN echo "Nominatim_Config.Reverse_Only = true;" >> \
