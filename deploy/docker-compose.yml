@@ -1,6 +1,8 @@
+version: '2'
+
 services:
   web:
-    image: smithmicro/n7m-web
+    image: smithmicro/n7m-web:4.3
     restart: always
     ports:
       - "80:80"
@@ -9,11 +11,11 @@ services:
       - ui
     mem_limit: 100m
   ui:
-    image: smithmicro/n7m-ui
+    image: smithmicro/n7m-ui:3.4
     restart: always
     mem_limit: 100m
   app:
-    image: smithmicro/n7m-app
+    image: smithmicro/n7m-app:4.3
     restart: always
     depends_on:
       - gis

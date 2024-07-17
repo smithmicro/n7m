@@ -8,10 +8,10 @@ n7m is Nominatim packaged in Docker images with separation of responsibilities b
 
 ## Overview
 This set of Docker images seperates responsbility into 5 areas:
-* **n7m-app** - The main [Nomainatim](https://nominatim.org/) service running [uvicorn](https://www.uvicorn.org/) connecting northbound and connecting southbound to `n7m-gis`
+* **n7m-app** - The main Nomainatim service running uvicorn connecting to `n7m-gis`
   * **feed** - Uses the `n7m-app` image to set up the `n7m-gis` database.  Can also be used for updates and downloading files.
-* **n7m-gis** - [PostGIS](https://postgis.net/) database
-* **n7m-ui** - Test web user interface from [Nomainatim-UI](https://github.com/osm-search/nominatim-ui)
+* **n7m-gis** - Postgis database 
+* **n7m-ui** - Test web user interface
 * **n7m-web** - nginx web sever that hosts:
   * `n7m-app` @ path: /api/v4/
   * `n7m-ui` @ path: /
