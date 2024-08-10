@@ -29,7 +29,7 @@ help() {
   echo "  -g|--grid -      country grids"
   echo "  -h|--help -      this help screen"
   echo "  -k|--uk-postal - UK postal code data"
-  echo "  -p|--planet -    Overture Maps Planet file"
+  echo "  -p|--planet -    OSM Planet file"
   echo "  -u|--us-postal - US postal code data"
   echo "  -w|--wiki -      Wikimedia file to improve search"
 }
@@ -60,9 +60,8 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     -p|--planet)
-      # Overture Maps Planet file: https://overturemaps.org/download/
-      OVERTURE_VERSION=2023-04-02-alpha
-      download https://overturemaps-us-west-2.s3.amazonaws.com/release/$OVERTURE_VERSION/planet-$OVERTURE_VERSION.osm.pbf
+      # Open Street Map Planet file - https://planet.openstreetmap.org/
+      download https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf
       shift
       ;;
     -h|--help)

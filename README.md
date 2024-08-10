@@ -90,4 +90,3 @@ To run n7m in AWS, the minimum EC2 Instance sizing is:
 * [Finding places: an introduction to Nominatim](https://www.youtube.com/watch?v=Q4zgDWY8ng0)
 * [OpenStreetMap](https://www.openstreetmap.org/about)
 * [OpenStreetMap Data Extracts](http://download.geofabrik.de/)
-* [Overture Maps Data](https://overturemaps.org/download/)

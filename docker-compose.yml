@@ -26,6 +26,8 @@ services:
     depends_on:
       - gis
     mem_limit: 200m
+    volumes:
+      - ./data:/data/
   feed:
     image: smithmicro/n7m-app:4.3
     depends_on:
@@ -48,6 +50,4 @@ services:
     environment:
       - POSTGRES_PASSWORD=n7m-geocoding
     volumes:
-      - pgdata:/var/lib/postgresql/data
-volumes:
-  pgdata:
+      - ./pgdata:/var/lib/postgresql/data
