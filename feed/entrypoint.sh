@@ -109,17 +109,4 @@ if [ "$1" = 'replication' ]; then
   exec nominatim "$@" --threads $PROCESSING_UNITS
 fi
 
-if [ "$1" = 'app' ]; then
-  # uvicorn ASGI
-  waitForGis
-  waitForGisDatabase nominatim
-
-  # the new server code is bundled within the python library
-  cd /usr/local/lib/nominatim/lib-python
-  # uvicorn uses the WEB_CONCURRENCY env variable for multiple worker processes
-  # modify WEB_CONCURRENCY in docker-compose.yaml
-  exec python3 -m uvicorn nominatim.server.falcon.server:run_wsgi \
-    --proxy-headers --host 0.0.0.0 --port 8000 --factory
-fi
-
 exec "$@"

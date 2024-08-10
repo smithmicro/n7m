@@ -2,7 +2,7 @@ version: '2'
 
 services:
   feed:
-    image: smithmicro/n7m-app:4.4
+    image: smithmicro/n7m-feed:4.4
     depends_on:
       - gis
     environment:

@@ -1,5 +1,3 @@
-version: '2'
-
 services:
   web:
     build: web
@@ -8,7 +6,7 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - app
+      - api
       - ui
     mem_limit: 100m
   ui:
@@ -16,20 +14,19 @@ services:
     image: smithmicro/n7m-ui:3.4
     restart: always
     mem_limit: 100m
-  app:
-    build: app
-    image: smithmicro/n7m-app:4.4
-    #restart: always
+  api:
+    build: api
+    image: smithmicro/n7m-api:4.4
+    restart: always
     environment:
       - PGPASSWORD=n7m-geocoding
       - WEB_CONCURRENCY=2
     depends_on:
       - gis
     mem_limit: 200m
-    volumes:
-      - ./data:/data/
   feed:
-    image: smithmicro/n7m-app:4.4
+    build: feed
+    image: smithmicro/n7m-feed:4.4
     depends_on:
       - gis
     environment:
@@ -38,7 +35,6 @@ services:
       - NOMINATIM_REPLICATION_URL=https://download.geofabrik.de/europe/monaco-updates
       - NOMINATIM_REPLICATION_MAX_DIFF=3000
       - NOMINATIM_REPLICATION_UPDATE_INTERVAL=86400
-    command: setup
     volumes:
       - ./data:/data/
   gis:

@@ -7,15 +7,15 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - app
+      - api
       - ui
     mem_limit: 100m
   ui:
     image: smithmicro/n7m-ui:3.4
     restart: always
     mem_limit: 100m
-  app:
-    image: smithmicro/n7m-app:4.4
+  api:
+    image: smithmicro/n7m-api:4.4
     restart: always
     depends_on:
       - gis

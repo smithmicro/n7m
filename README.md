@@ -8,12 +8,12 @@ n7m is Nominatim packaged in Docker images with separation of responsibilities b
 
 ## Overview
 This set of Docker images seperates responsbility into 5 areas:
-* **n7m-app** - The main Nomainatim service running uvicorn connecting to `n7m-gis`
-  * **feed** - Uses the `n7m-app` image to set up the `n7m-gis` database.  Can also be used for updates and downloading files.
+* **n7m-feed** - The main service for DB creation, updates and downloading files
+* **n7m-api** - The API running uvicorn connecting to `n7m-gis`
 * **n7m-gis** - Postgis database 
 * **n7m-ui** - Test web user interface
 * **n7m-web** - nginx web sever that hosts:
-  * `n7m-app` @ path: /api/v4/
+  * `n7m-api` @ path: /api/v4/
   * `n7m-ui` @ path: /
 
 ## Architecture
@@ -31,10 +31,10 @@ This set of Docker images seperates responsbility into 5 areas:
        v 8000
 +--------------+      +--------------+
 |              |      |              |
-|   n7m-app    |      |     feed     |
+|   n7m-api    |      |   n7m-feed   |
 |              |      |              |
 +--------------+      +--------------+
-| ubuntu:jammy |      |   n7m-app    |
+|debian:12-slim|      |debian:12-slim|
 +--------------+      +--------------+
                |              |     |
                v      5432    v     v
@@ -56,7 +56,7 @@ This set of Docker images seperates responsbility into 5 areas:
 4. Edit the OSM_FILENAME environment variable in `docker-compose.yml` file to select the downloaded OSM file.
    * The default is `monaco-latest.osm.pbf` which was downloaded in step 3.
 5. Run `docker-compose up`
-   * Since the import process is long, the `n7m-app` container terminates after 10 seconds.  Run `docker-compose up` again after import so it restarts.
+   * Since the import process is long, the `n7m-api` container terminates after 10 seconds.  Run `docker-compose up` again after import so it restarts.
 6. Browse to: `http://localhost:8080`
 
 ## Additional Commands

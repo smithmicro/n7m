@@ -1,4 +1,4 @@
-FROM ubuntu:jammy AS build
+FROM debian:12-slim AS build
 
 # https://nominatim.org/release-docs/develop/appendix/Install-on-Ubuntu-22/
 ENV DEBIAN_FRONTEND=noninteractive
@@ -39,7 +39,7 @@ RUN cmake ../Nominatim -DBoost_USE_STATIC_LIBS=ON \
  && make install
 
 # now start over from the same base image
-FROM ubuntu:jammy
+FROM debian:12-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -49,7 +49,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     liblua5.4 \
     libproj-dev \
-    postgresql-client-14 \
+    postgresql-client-15 \
     python3-asyncpg \
     python3-datrie \
     python3-dotenv \
@@ -86,6 +86,4 @@ COPY --from=build /usr/local/share/nominatim/ /usr/local/share/nominatim/
 COPY --chmod=0755 *.sh ./
 
 ENTRYPOINT [ "./entrypoint.sh" ]
-CMD [ "app" ]
-
-EXPOSE 8000
+CMD [ "setup" ]
