@@ -6,6 +6,7 @@ services:
     environment:
       - PGPASSWORD=n7m-geocoding
       - OSM_FILENAME=north-america-latest.osm.pbf
+      - NOMINATIM_FLATNODE_FILE=/data/flatnode.file
     command: setup
     volumes:
       - /data/data:/data/

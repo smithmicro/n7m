@@ -20,6 +20,9 @@ services:
     environment:
       - PGPASSWORD=n7m-geocoding
       - WEB_CONCURRENCY=4
+      - NOMINATIM_FLATNODE_FILE=/data/flatnode.file
+    volumes:
+      - /data/data:/data/
   gis:
     image: smithmicro/n7m-gis:15
     restart: always

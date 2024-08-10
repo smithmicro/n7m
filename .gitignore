@@ -1,2 +1,3 @@
 *.pbf
 data/
+pgdata/
