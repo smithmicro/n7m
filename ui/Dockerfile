@@ -1,4 +1,4 @@
-FROM nginx:1.24-alpine
+FROM nginx:1.27-alpine
 
 # https://nominatim.org/release-docs/latest/admin/Setup-Nominatim-UI/
 

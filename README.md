@@ -56,7 +56,7 @@ This set of Docker images seperates responsbility into 5 areas:
 4. Edit the OSM_FILENAME environment variable in `docker-compose.yml` file to select the downloaded OSM file.
    * The default is `monaco-latest.osm.pbf` which was downloaded in step 3.
 5. Run `docker-compose up`
-   * Since the import process is long, the `n7m-api` container terminates after 10 seconds.  Run `docker-compose up` again after import so it restarts.
+   * Wait a few minutes for the data to import.  You will see "Import complete"..
 6. Browse to: `http://localhost:8080`
 
 ## Additional Commands

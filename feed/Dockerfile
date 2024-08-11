@@ -53,14 +53,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-asyncpg \
     python3-datrie \
     python3-dotenv \
-    python3-falcon \
     python3-geoalchemy2 \
     python3-icu \
     python3-jinja2 \
     python3-psutil \
     python3-psycopg2 \
     python3-pyosmium \
-    python3-uvicorn \
     python3-sqlalchemy \
     python3-yaml \
  && apt-get clean \
