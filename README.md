@@ -4,13 +4,13 @@ Minimalistic Docker images for Nominatim
 ## About
 n7m is a [Numeronym](https://en.wikipedia.org/wiki/Numeronym) for [Nominatim](https://nominatim.org/).
 
-n7m is Nominatim packaged in Docker images with separation of responsibilities between housing the web server, ui, applicaiton server, setup processes and PostgreSQL.
+n7m is Nominatim packaged in Docker images with separation of responsibilities between housing the web server, UI, API server, setup processes and PostGIS.
 
 ## Overview
 This set of Docker images seperates responsbility into 5 areas:
 * **n7m-feed** - The main service for DB creation, updates and downloading files
 * **n7m-api** - The API running uvicorn connecting to `n7m-gis`
-* **n7m-gis** - Postgis database 
+* **n7m-gis** - PostGIS database 
 * **n7m-ui** - Test web user interface
 * **n7m-web** - nginx web sever that hosts:
   * `n7m-api` @ path: /api/v4/
@@ -19,7 +19,7 @@ This set of Docker images seperates responsbility into 5 areas:
 ## Architecture
 ```
        |
-       v 8080
+       v 8080 (dev), 80 (prod)
 +--------------+      +--------------+
 |              |      |              |
 |   n7m-web    |----->|    n7m-ui    |
