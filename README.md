@@ -34,7 +34,7 @@ This set of Docker images seperates responsbility into 5 areas:
 |   n7m-api    |      |   n7m-feed   |
 |              |      |              |
 +--------------+      +--------------+
-|debian:12-slim|      |debian:12-slim|
+|    python    |      |    python    |
 +--------------+      +--------------+
                |              |     |
                v      5432    v     v
@@ -70,20 +70,11 @@ This set of Docker images seperates responsbility into 5 areas:
    * `docker-compose run feed replication`
 
 ## Configuration Hints
-For updates, consider these configurations:
+For imports and updates, consider these configurations:
 * NOMINATIM_REPLICATION_MAX_DIFF - you will want to set this to a larger number.
 * NOMINATIM_REPLICATION_URL - you will want to set this to a closer mirror.
-
-## AWS EC2
-To run n7m in AWS, the minimum EC2 Instance sizing is:
-* Instance: `m5.4xlarge` - 64 GB RAM, 16 vCPUs
-* Storage: 350GB SSD for North America
-
-### Instance Comparison
-* Instance: `m5.4xlarge` - 64 GB RAM, 16 vCPUs, 0.768/Hour
-  * North America:  14.12 hours = $10.84
-* Instance: `m5.8xlarge` - 128 GB RAM, 32 vCPUs, 1.536/Hour
-  * North America:  10.57 hours = $16.23
+* NOMINATIM_IMPORT_STYLE - Import configuration [`address` | `admin` | `extratags` | `full` | `street`]
+* NOMINATIM_IMPORT_FLAGS - additional flags you can pass to `nominatim import`
 
 ## Resources
 * [Nominatim Web Site](https://nominatim.org/)

@@ -69,7 +69,7 @@ if [ "$1" = 'setup' ]; then
   echo "Number of processing units: $PROCESSING_UNITS"
 
   # time the import so we can compare database configuration
-  time nominatim import --osm-file /data/$OSM_FILENAME --project-dir /data --threads $PROCESSING_UNITS
+  time nominatim import $NOMINATIM_IMPORT_FLAGS --osm-file /data/$OSM_FILENAME --project-dir /data --threads $PROCESSING_UNITS
   if [ $? != 0 ]; then
     echo "Import failed"
     exit 1

@@ -1,56 +1,31 @@
-FROM debian:12-slim AS build
+FROM python:3.9-slim-bookworm
 
-# https://nominatim.org/release-docs/develop/appendix/Install-on-Ubuntu-22/
-ENV DEBIAN_FRONTEND=noninteractive
+ENV NOMINATIM_VERSION=4.5.0
+
+# https://nominatim.org/release-docs/latest/admin/Install-on-Ubuntu-24/
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    curl \
-    lbzip2
-
-ENV NOMINATIM_VERSION=4.4.0
-
-# Fetch
-WORKDIR /nominatim
-RUN curl -O -L http://www.nominatim.org/release/Nominatim-$NOMINATIM_VERSION.tar.bz2 \
- && tar xvf Nominatim-$NOMINATIM_VERSION.tar.bz2 \
- && mv Nominatim-$NOMINATIM_VERSION Nominatim
-
-# now start over from the same base image
-FROM debian:12-slim
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-# install dependencies of the built binaries
-RUN apt-get update && apt-get install -y --no-install-recommends \
+    g++ \
+    libicu-dev \
+    pkg-config \
     postgresql-client-15 \
-    python3-asyncpg \
-    python3-dotenv \
-    python3-falcon \
-    python3-icu \
-    python3-psycopg2 \
-    python3-uvicorn \
-    python3-sqlalchemy \
-    python3-yaml \
+ && pip install --no-cache-dir \
+    falcon \
+    nominatim_api==$NOMINATIM_VERSION \
+    uvicorn \
+ && apt-get purge -y --auto-remove \
+    g++ \
+    pkg-config \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-# For settings, see: https://nominatim.org/release-docs/develop/customize/Settings/
-ENV NOMINATIM_TOKENIZER=icu \
-    PGHOST=gis \
+# For uvicorn settings, see: https://www.uvicorn.org/deployment/
+ENV PGHOST=gis \
     PGUSER=postgres \
     PGPASSWORD=change-this-password \
-    OSM_FILENAME= \
     WEB_CONCURRENCY=1
 
-WORKDIR /nominatim
+EXPOSE 8000
 
-# copy the two directories needed
-COPY --from=build /nominatim/Nominatim/settings/ /nominatim/settings/
-COPY --from=build /nominatim/Nominatim/nominatim/ /nominatim/nominatim/
-
-# copy shell scripts
-COPY --chmod=0755 *.sh ./
-
-ENTRYPOINT [ "./entrypoint.sh" ]
-CMD [ "api" ]
+CMD [ "python3", "-m", "uvicorn", "nominatim_api.server.falcon.server:run_wsgi", "--proxy-headers", \
+    "--host", "0.0.0.0", "--port", "8000", "--factory" ]
