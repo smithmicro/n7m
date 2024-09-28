@@ -69,7 +69,7 @@ if [ "$1" = 'setup' ]; then
   echo "Number of processing units: $PROCESSING_UNITS"
 
   # time the import so we can compare database configuration
-  time nominatim import --osm-file /data/$OSM_FILENAME --project-dir /data --threads $PROCESSING_UNITS
+  time nominatim import $NOMINATIM_IMPORT_FLAGS --osm-file /data/$OSM_FILENAME --project-dir /data --threads $PROCESSING_UNITS
   if [ $? != 0 ]; then
     echo "Import failed"
     exit 1
@@ -107,19 +107,6 @@ if [ "$1" = 'replication' ]; then
 
   nominatim replication --init
   exec nominatim "$@" --threads $PROCESSING_UNITS
-fi
-
-if [ "$1" = 'app' ]; then
-  # uvicorn ASGI
-  waitForGis
-  waitForGisDatabase nominatim
-
-  # the new server code is bundled within the python library
-  cd /usr/local/lib/nominatim/lib-python
-  # uvicorn uses the WEB_CONCURRENCY env variable for multiple worker processes
-  # modify WEB_CONCURRENCY in docker-compose.yaml
-  exec python3 -m uvicorn nominatim.server.falcon.server:run_wsgi \
-    --proxy-headers --host 0.0.0.0 --port 8000 --factory
 fi
 
 exec "$@"

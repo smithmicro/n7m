@@ -1,32 +1,27 @@
-version: '2'
-
 services:
   web:
-    image: smithmicro/n7m-web:4.4
+    image: smithmicro/n7m-web
     restart: always
     ports:
       - "80:80"
     depends_on:
-      - app
+      - api
       - ui
     mem_limit: 100m
   ui:
-    image: smithmicro/n7m-ui:3.4
+    image: smithmicro/n7m-ui
     restart: always
     mem_limit: 100m
-  app:
-    image: smithmicro/n7m-app:4.4
+  api:
+    image: smithmicro/n7m-api
     restart: always
     depends_on:
       - gis
     environment:
       - PGPASSWORD=n7m-geocoding
       - WEB_CONCURRENCY=4
-      - NOMINATIM_FLATNODE_FILE=/data/flatnode.file
-    volumes:
-      - /data/data:/data/
   gis:
-    image: smithmicro/n7m-gis:15
+    image: smithmicro/n7m-gis
     restart: always
     environment:
       - POSTGRES_PASSWORD=n7m-geocoding

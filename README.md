@@ -4,22 +4,22 @@ Minimalistic Docker images for Nominatim
 ## About
 n7m is a [Numeronym](https://en.wikipedia.org/wiki/Numeronym) for [Nominatim](https://nominatim.org/).
 
-n7m is Nominatim packaged in Docker images with separation of responsibilities between housing the web server, ui, applicaiton server, setup processes and PostgreSQL.
+n7m is Nominatim packaged in Docker images with separation of responsibilities between housing the web server, UI, API server, setup processes and PostGIS.
 
 ## Overview
 This set of Docker images seperates responsbility into 5 areas:
-* **n7m-app** - The main Nomainatim service running uvicorn connecting to `n7m-gis`
-  * **feed** - Uses the `n7m-app` image to set up the `n7m-gis` database.  Can also be used for updates and downloading files.
-* **n7m-gis** - Postgis database 
+* **n7m-feed** - The main service for DB creation, updates and downloading files
+* **n7m-api** - The API running uvicorn connecting to `n7m-gis`
+* **n7m-gis** - PostGIS database 
 * **n7m-ui** - Test web user interface
 * **n7m-web** - nginx web sever that hosts:
-  * `n7m-app` @ path: /api/v4/
+  * `n7m-api` @ path: /api/v4/
   * `n7m-ui` @ path: /
 
 ## Architecture
 ```
        |
-       v 8080
+       v 8080 (dev), 80 (prod)
 +--------------+      +--------------+
 |              |      |              |
 |   n7m-web    |----->|    n7m-ui    |
@@ -31,10 +31,10 @@ This set of Docker images seperates responsbility into 5 areas:
        v 8000
 +--------------+      +--------------+
 |              |      |              |
-|   n7m-app    |      |     feed     |
+|   n7m-api    |      |   n7m-feed   |
 |              |      |              |
 +--------------+      +--------------+
-| ubuntu:jammy |      |   n7m-app    |
+|    python    |      |    python    |
 +--------------+      +--------------+
                |              |     |
                v      5432    v     v
@@ -56,7 +56,7 @@ This set of Docker images seperates responsbility into 5 areas:
 4. Edit the OSM_FILENAME environment variable in `docker-compose.yml` file to select the downloaded OSM file.
    * The default is `monaco-latest.osm.pbf` which was downloaded in step 3.
 5. Run `docker-compose up`
-   * Since the import process is long, the `n7m-app` container terminates after 10 seconds.  Run `docker-compose up` again after import so it restarts.
+   * Wait a few minutes for the data to import.  You will see "Import complete"..
 6. Browse to: `http://localhost:8080`
 
 ## Additional Commands
@@ -70,20 +70,11 @@ This set of Docker images seperates responsbility into 5 areas:
    * `docker-compose run feed replication`
 
 ## Configuration Hints
-For updates, consider these configurations:
+For imports and updates, consider these configurations:
 * NOMINATIM_REPLICATION_MAX_DIFF - you will want to set this to a larger number.
 * NOMINATIM_REPLICATION_URL - you will want to set this to a closer mirror.
-
-## AWS EC2
-To run n7m in AWS, the minimum EC2 Instance sizing is:
-* Instance: `m5.4xlarge` - 64 GB RAM, 16 vCPUs
-* Storage: 350GB SSD for North America
-
-### Instance Comparison
-* Instance: `m5.4xlarge` - 64 GB RAM, 16 vCPUs, 0.768/Hour
-  * North America:  14.12 hours = $10.84
-* Instance: `m5.8xlarge` - 128 GB RAM, 32 vCPUs, 1.536/Hour
-  * North America:  10.57 hours = $16.23
+* NOMINATIM_IMPORT_STYLE - Import configuration [`address` | `admin` | `extratags` | `full` | `street`]
+* NOMINATIM_IMPORT_FLAGS - additional flags you can pass to `nominatim import`
 
 ## Resources
 * [Nominatim Web Site](https://nominatim.org/)

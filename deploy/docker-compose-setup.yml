@@ -1,8 +1,6 @@
-version: '2'
-
 services:
   feed:
-    image: smithmicro/n7m-app:4.4
+    image: smithmicro/n7m-feed
     depends_on:
       - gis
     environment:
@@ -14,7 +12,7 @@ services:
       - /data/data:/data/
     shm_size: 1gb
   gis:
-    image: smithmicro/n7m-gis:15
+    image: smithmicro/n7m-gis
     restart: always
     environment:
       - POSTGRES_PASSWORD=n7m-geocoding

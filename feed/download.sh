@@ -7,7 +7,7 @@
 set -e
 
 # https://nominatim.org server requires a User Agent
-USER_AGENT="smithmicro/n7m-app"
+USER_AGENT="smithmicro/n7m-feed"
 
 download() {
   DOWNLOAD_FILENAME=$(basename "$1")
