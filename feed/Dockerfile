@@ -1,4 +1,4 @@
-FROM python:3.9-slim-bookworm
+FROM python:3.11-slim-bookworm
 
 ENV NOMINATIM_VERSION=4.5.0
 
