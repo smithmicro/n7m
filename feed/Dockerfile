@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     osm2pgsql>=1.8 \
     pkg-config \
     postgresql-client-15 \
+    curl \
  && pip install --no-cache-dir \
     nominatim_db==$NOMINATIM_VERSION \
  && apt-get purge -y --auto-remove \
